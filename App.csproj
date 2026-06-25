@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <!-- WebAuthn / FIDO2 (passkeys, security keys). Fido2.AspNet provides the
          AddFido2() DI extension and pulls in the core Fido2 package. -->
     <PackageReference Include="Fido2.AspNet" Version="4.0.1" />
