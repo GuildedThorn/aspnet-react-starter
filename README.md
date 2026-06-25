@@ -100,3 +100,4 @@ See `.env.example` and `Resources/config.example.json`. Required: `Jwt:Key`,
 ## License
 
 MIT — see `LICENSE` (update the copyright holder).
+
