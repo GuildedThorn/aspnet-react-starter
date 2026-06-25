@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SpaRoot>frontend/</SpaRoot>
+    <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <SpaProxyLaunchCommand>bun run dev</SpaProxyLaunchCommand>
+    <SpaProxyApplyProxyToSpaDevelopmentServer>true</SpaProxyApplyProxyToSpaDevelopmentServer>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <!-- WebAuthn / FIDO2 (passkeys, security keys). Fido2.AspNet provides the
+         AddFido2() DI extension and pulls in the core Fido2 package. -->
+    <PackageReference Include="Fido2.AspNet" Version="4.0.1" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="10.0.8" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
+    <PackageReference Include="MongoDB.Bson" Version="3.9.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.9.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Unit/integration tests live in Tests/ with their own project. The Web
+         SDK globs **/*.cs, so exclude them from the web app build. -->
+    <Compile Remove="Tests/**/*.cs" />
+    <Content Remove="Tests/**/*" />
+  </ItemGroup>
+
+  <!-- Build the frontend (→ wwwroot) before publish. Skip with
+       -p:SkipFrontendBuild=true (the Nix/Docker builds compile the SPA
+       separately and set this). -->
+  <Target Name="BuildReactApp" BeforeTargets="Publish" Condition="'$(SkipFrontendBuild)' != 'true'">
+    <Exec WorkingDirectory="$(SpaRoot)" Command="bun install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="bun run build" />
+  </Target>
+
+</Project>

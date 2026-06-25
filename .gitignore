@@ -1,0 +1,31 @@
+# IDE
+/.idea
+/.vs
+
+# .NET
+**/bin/
+**/obj/
+/publish
+
+# Node / frontend
+node_modules/
+/dist
+frontend/stats.html
+
+# Build output (frontend → wwwroot, served by the backend)
+/wwwroot
+
+# Secrets & local config (supply via env vars / .env in dev)
+*.env
+!.env.example
+/Secrets
+Resources/config.json
+certs/
+
+# Nix
+/result
+/result-*
+/fetch-deps
+
+# Runtime data (e.g. uploads)
+/data

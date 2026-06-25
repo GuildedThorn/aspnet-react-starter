@@ -1,0 +1,367 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+@plugin "@tailwindcss/typography";
+
+@theme {
+	--font-sans: "Geist Variable", ui-sans-serif, system-ui, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, "Noto Sans", sans-serif;
+	--font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo,
+		Monaco, Consolas, "Liberation Mono", monospace;
+
+	/* Semantic tokens — single source of truth for the palette.
+	   Light: white surfaces, gray-800 text, blue-600 accent.
+	   Dark: gray-900/800 surfaces, gray-100 text, blue-400/500 accent. */
+	--color-background: light-dark(var(--color-white), var(--color-gray-900));
+	--color-foreground: light-dark(var(--color-gray-800), var(--color-gray-100));
+
+	--color-card: light-dark(var(--color-white), var(--color-gray-800));
+	--color-card-foreground: var(--color-foreground);
+
+	--color-muted: light-dark(var(--color-gray-100), var(--color-gray-700));
+	/* gray-600 (not 500) in light mode so muted/secondary text clears the 4.5:1
+	   contrast ratio on white and on muted/tile backgrounds (WCAG AA). */
+	--color-muted-foreground: light-dark(var(--color-gray-600), var(--color-gray-400));
+
+	--color-accent: light-dark(var(--color-gray-100), var(--color-gray-700));
+	--color-accent-foreground: var(--color-foreground);
+
+	--color-primary: light-dark(var(--color-blue-600), var(--color-blue-500));
+	--color-primary-foreground: var(--color-white);
+
+	--color-destructive: light-dark(var(--color-red-600), var(--color-red-500));
+	--color-destructive-foreground: var(--color-white);
+
+	--color-success: light-dark(var(--color-green-600), var(--color-green-500));
+
+	--color-border: light-dark(var(--color-gray-200), var(--color-gray-700));
+	--color-input: light-dark(var(--color-gray-300), var(--color-gray-600));
+	--color-ring: var(--color-blue-400);
+
+	/* Navy surfaces — deep blue panel palette (e.g. the network map). */
+	--color-navy: #0a0f1f;
+	--color-navy-surface: #15203a;
+	--color-navy-border: #2a3a5e;
+	--color-navy-foreground: #e2e8f0;
+	--color-navy-muted: #94a3b8;
+
+	/* Corner radius — every rounded-* utility derives from one knob.
+	   Change --radius once to restyle every corner in the app. */
+	--radius: 0.75rem;
+	--radius-sm: calc(var(--radius) - 0.25rem);
+	--radius-md: calc(var(--radius) - 0.125rem);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 0.25rem);
+	--radius-2xl: calc(var(--radius) + 0.5rem);
+}
+
+@layer base {
+	html {
+		color-scheme: light dark;
+		scrollbar-color: color-mix(in srgb, var(--color-slate-500) 40%, transparent)
+			transparent;
+	}
+
+	html,
+	body,
+	#root {
+		height: 100%;
+	}
+
+	body {
+		overflow-x: clip;
+		color: var(--color-foreground);
+		background-color: var(--color-background);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+		font-synthesis: none;
+	}
+
+	#root {
+		margin-inline: auto;
+		text-align: center;
+	}
+
+	/* Display headings — Geist looks sharpest tight + heavy. */
+	h1 {
+		font-size: 3rem;
+		line-height: 1.1;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+	}
+
+	h2,
+	h3 {
+		letter-spacing: -0.015em;
+	}
+
+	a,
+	button {
+		transition: color 0.2s ease;
+	}
+
+	button {
+		cursor: pointer;
+	}
+
+	a:hover,
+	button:hover {
+		color: light-dark(var(--color-blue-600), var(--color-blue-400));
+	}
+}
+
+@layer components {
+	.section {
+		/* [&>*]:min-w-0 — grid items default to min-width:auto, which lets a wide
+		   child (long text, a table) blow the column past the viewport on mobile. */
+		@apply grid grid-cols-1 gap-4 py-3 lg:grid-cols-2 lg:gap-8 [&>*]:min-w-0;
+	}
+
+	/* The one content-width class to rule them all: every routed page's root
+	   applies `.page` so content lines up EXACTLY with the NavBar and Footer
+	   cards. Those cards are max-w-7xl (80rem) centered, with their px-3
+	   (0.75rem/side) gutter on a full-width parent — i.e. OUTSIDE the cap, so
+	   each card spans the full 80rem on wide screens. We reproduce that here
+	   with a width calc rather than `max-w-7xl px-3` (which would put the gutter
+	   INSIDE the cap and inset content 0.75rem/side on wide screens).
+
+	   `.page` also owns the standard top/bottom page padding so every route has
+	   the same vertical rhythm — pages must NOT add their own `py-*`, width,
+	   centering, or horizontal gutters. (Print zeroes this; see @media print.) */
+	.page {
+		@apply mx-auto py-8 sm:py-12;
+		width: min(100% - 1.5rem, 80rem);
+	}
+
+	/* The shared surface for every card / form panel. */
+	.panel {
+		@apply rounded-xl border border-border bg-card text-card-foreground shadow-sm;
+	}
+
+	/* An inset surface for content nested inside a .panel / Card
+	   (muted background so it reads against the card it sits on). */
+	.tile {
+		@apply rounded-xl border border-border bg-muted;
+	}
+
+	/* Standard form field label. */
+	.field-label {
+		@apply mb-1.5 block text-sm font-medium text-foreground/80;
+	}
+
+	/* Small mono uppercase accent label (Geist Mono) for stats, meta, etc. */
+	.eyebrow {
+		@apply font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground;
+	}
+
+	.nav-link {
+		@apply inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-sm
+			font-medium text-foreground/80 transition-colors hover:bg-muted
+			hover:text-primary focus-visible:outline-none focus-visible:ring-2
+			focus-visible:ring-ring;
+	}
+}
+
+/* Respect users who ask for reduced motion: neutralize transitions, animations,
+   hover lifts, pulses, and smooth scrolling across the whole site. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	/* Skip SPA view-transition animations (blog/gallery) for these users. */
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}
+
+/* ── SPA view transitions (blog + gallery navigations) ──────────────────────
+   Only blog/gallery links/navigations opt in via the `viewTransition` prop, so
+   these styles never touch the rest of the app. Reduced-motion users get none
+   of it (the @media block above zeroes every view-transition animation). */
+@keyframes vt-fade-in {
+	from {
+		opacity: 0;
+	}
+}
+@keyframes vt-fade-out {
+	to {
+		opacity: 0;
+	}
+}
+
+/* Page content (everything not tagged as a shared element): a clean cross-fade. */
+::view-transition-old(root) {
+	animation: vt-fade-out 180ms ease both;
+}
+::view-transition-new(root) {
+	animation: vt-fade-in 220ms ease both;
+}
+
+/* ── Gallery photo carousel ─────────────────────────────────────────────────
+   Pure-CSS navigation: a scroll-snap strip with browser-generated scroll
+   buttons (::scroll-button) and scroll markers/dots (::scroll-marker). The
+   generated buttons + dots are Chromium-only today; everywhere else this
+   gracefully stays a swipeable, scroll-snapping photo strip. */
+.photo-carousel {
+	position: relative;
+	display: flex;
+	height: clamp(360px, 72vh, 900px);
+	margin: 0;
+	padding: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-snap-type: x mandatory;
+	scroll-behavior: smooth;
+	overscroll-behavior-x: contain;
+	scrollbar-width: none; /* Firefox: hide the native bar for a clean look */
+	anchor-name: --photo-carousel;
+	scroll-marker-group: after;
+}
+.photo-carousel::-webkit-scrollbar {
+	display: none; /* Chromium/WebKit: hide the native bar */
+}
+
+.photo-carousel > li {
+	flex: 0 0 100%;
+	scroll-snap-align: center;
+	scroll-snap-stop: always;
+}
+
+/* Prev / next buttons, vertically centered on the carousel's left/right edges. */
+.photo-carousel::scroll-button(*) {
+	position: absolute;
+	position-anchor: --photo-carousel;
+	z-index: 20;
+	align-self: anchor-center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border: 1px solid var(--color-border);
+	border-radius: 9999px;
+	background: color-mix(in srgb, var(--color-background) 78%, transparent);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+	color: var(--color-foreground);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease,
+		opacity 0.2s ease,
+		translate 0.06s ease;
+}
+.photo-carousel::scroll-button(*):hover {
+	background: var(--color-muted);
+	color: var(--color-primary);
+}
+.photo-carousel::scroll-button(*):focus-visible {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
+}
+.photo-carousel::scroll-button(*):active {
+	translate: 0 1px;
+}
+.photo-carousel::scroll-button(*):disabled {
+	opacity: 0.25;
+	cursor: default;
+}
+.photo-carousel::scroll-button(left) {
+	content: "‹" / "Previous photo";
+	left: anchor(left);
+	margin-left: 0.85rem;
+}
+.photo-carousel::scroll-button(right) {
+	content: "›" / "Next photo";
+	right: anchor(right);
+	margin-right: 0.85rem;
+}
+
+/* Dots: one per photo, collected and centered along the bottom. */
+.photo-carousel::scroll-marker-group {
+	position: absolute;
+	position-anchor: --photo-carousel;
+	z-index: 20;
+	justify-self: anchor-center;
+	bottom: anchor(bottom);
+	margin-bottom: 0.9rem;
+	display: flex;
+	gap: 0.55rem;
+	padding: 0.45rem 0.7rem;
+	border-radius: 9999px;
+	background: color-mix(in srgb, var(--color-background) 55%, transparent);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+}
+.photo-carousel > li::scroll-marker {
+	content: attr(data-accname); /* accessible name; visually hidden below */
+	width: 0.6rem;
+	height: 0.6rem;
+	overflow: hidden;
+	text-indent: 1.5rem;
+	white-space: nowrap;
+	border: none;
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--color-foreground) 35%, transparent);
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		scale 0.2s ease;
+}
+.photo-carousel > li::scroll-marker:hover {
+	background: color-mix(in srgb, var(--color-foreground) 65%, transparent);
+}
+.photo-carousel > li::scroll-marker:target-current {
+	background: var(--color-primary);
+	scale: 1.3;
+}
+
+@media print {
+	/* Force every light-dark() token to its LIGHT value, so a visitor printing
+	   from a dark-mode OS still gets clean black-on-white output instead of
+	   light text that's invisible on paper. Shrinking the root font-size scales
+	   the whole rem grid (text + spacing) down so the résumé fits a single page
+	   — column widths are %-based, so only height compresses, not the width. */
+	/* `!important` so it overrides the inline color-scheme the theme toggle sets
+	   on <html> — otherwise a dark-theme visitor would print invisible text. */
+	html {
+		color-scheme: light !important;
+		font-size: 11px;
+	}
+
+	/* Suppress the browser's own print header/footer (page title, URL, date,
+	   "1 of 1" page numbers): zeroing the page margin removes the margin box
+	   they render in. We then re-create comfortable edges with padding on the
+	   content itself. (The print dialog's "Headers and footers" toggle is the
+	   ultimate control, but this handles it automatically in Chrome/Edge.) */
+	@page {
+		margin: 0;
+	}
+
+	.page {
+		width: 100%;
+		padding: 0.5in 0.55in;
+	}
+
+	#root > * {
+		min-height: 0 !important;
+	}
+
+	/* Keep individual entries and list items from splitting across pages. */
+	li,
+	section > div > div {
+		break-inside: avoid;
+	}
+}

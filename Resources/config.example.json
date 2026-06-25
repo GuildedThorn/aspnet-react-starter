@@ -1,0 +1,29 @@
+{
+  "_comment": "Optional config source, merged after appsettings.json and before env vars. Copy to config.json (gitignored) for local dev, or supply everything via environment variables / .env instead. Do NOT commit secrets.",
+
+  "Jwt": {
+    "Key": "REPLACE_WITH_BASE64_32_BYTE_HMAC_KEY",
+    "Issuer": "app",
+    "Audience": "app"
+  },
+  "MongoDB": {
+    "ConnectionString": "mongodb://localhost:27017",
+    "DatabaseName": "app"
+  },
+  "Cors": {
+    "Origins": [ "https://localhost:5173" ]
+  },
+  "Fido2": {
+    "ServerDomain": "localhost",
+    "ServerName": "App",
+    "Origins": [ "https://localhost:5173" ]
+  },
+  "RabbitMQ": {
+    "HostName": "localhost",
+    "Username": "guest",
+    "Password": "guest"
+  },
+  "Loki": {
+    "Uri": ""
+  }
+}
