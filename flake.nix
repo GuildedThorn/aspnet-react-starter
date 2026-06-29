@@ -22,7 +22,7 @@
 
           # Regenerate after changing package-lock.json:
           #   nix run nixpkgs#prefetch-npm-deps -- frontend/package-lock.json
-          npmDepsHash = "sha256-X/TMrTq69ZklEOR1K1IYbCv096MP0Vk9+s2GjUwEL3k=";
+          npmDepsHash = "sha256-BFqFnKnvRVqxIMsq9jPdG+9yYeAsfZWD+m1oQC/4npQ=";
 
           # vite.config.ts writes to ../wwwroot (one level above the source root)
           installPhase = ''
