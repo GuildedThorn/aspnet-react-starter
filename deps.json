@@ -30,6 +30,11 @@
     "hash": "sha256-upadIQMUYlznjb/0ZTSpjjkCscSF9NrikGjbP88f5cU="
   },
   {
+    "pname": "FSharp.Core",
+    "version": "10.1.301",
+    "hash": "sha256-mJZgPWzVXH/bqEH4DKWOQzzJdTvV8xTtJdj4s4nRzYk="
+  },
+  {
     "pname": "libsodium",
     "version": "1.0.20.1",
     "hash": "sha256-wd/z31FRbcaVGrogSNVjefEYWjNxTGzQd04DOlY1PFE="
@@ -131,11 +136,6 @@
   },
   {
     "pname": "Serilog",
-    "version": "2.12.0",
-    "hash": "sha256-JD+ud+CFoLGdYGasTWKTxx5PYj2W5pBv2lMybBK7HVM="
-  },
-  {
-    "pname": "Serilog",
     "version": "4.0.0",
     "hash": "sha256-j8hQ5TdL1TjfdGiBO9PyHJFMMPvATHWN1dtrrUZZlNw="
   },
@@ -143,6 +143,11 @@
     "pname": "Serilog",
     "version": "4.2.0",
     "hash": "sha256-7f3EpCsEbDxXgsuhE430KVI14p7oDUuCtwRpOCqtnbs="
+  },
+  {
+    "pname": "Serilog",
+    "version": "4.3.1",
+    "hash": "sha256-TY+GaQYnyDfOGl0gi67xDyUMOuV/mjz8BU66/UsmStI="
   },
   {
     "pname": "Serilog.AspNetCore",
@@ -186,8 +191,8 @@
   },
   {
     "pname": "Serilog.Sinks.Grafana.Loki",
-    "version": "8.3.1",
-    "hash": "sha256-prVM43Oim7j0GicWaWMpWqH+1Y2jFucAxiwMTCY3ZVY="
+    "version": "9.0.1",
+    "hash": "sha256-k0Tk1QaMDEBUuGheLhdNSxlIfJKVCrY6TAsKqqC9Cpc="
   },
   {
     "pname": "SharpCompress",
